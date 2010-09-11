@@ -30,4 +30,22 @@ describe "Users" do
       end
     end
   end
+
+  describe "sign in/out" do
+    
+    describe "failure" do
+      
+      it "should not sign in a user" do
+        integration_sign_in(User.new(:email => "", :password => ""))
+        response.should have_selector("div.flash.error", :content => "Invalid")
+      end
+      
+      it "should sign a user in and out" do
+        integration_sign_in(Factory(:user))
+        controller.should be_signed_in
+        click_link "Sign out"
+        controller.should_not be_signed_in
+      end
+    end
+  end
 end
